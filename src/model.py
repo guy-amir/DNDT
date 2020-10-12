@@ -11,6 +11,7 @@ class DNDT(torch.nn.Module):
         self.leaves2classes.requires_grad = True
         self.beta.requires_grad = True
         self.temperature = temperature
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         
     def pi_maker(feature,beta,temperature=0.1):
         n_bins = len(beta)
@@ -29,9 +30,9 @@ class DNDT(torch.nn.Module):
          
     def forward(self, x):
 
-        x = x.unsqueeze(2)
-        w = torch.reshape(torch.linspace(1,self.n_bins,self.n_bins),[1,-1]).double()
-        b = self.beta2b()
+        x = x.unsqueeze(2).to(self.device)
+        w = torch.reshape(torch.linspace(1,self.n_bins,self.n_bins),[1,-1]).to(self.device).double()
+        b = self.beta2b().to(self.device)
         xw = torch.matmul(x,w)
         
         sigma = torch.sigmoid((xw+b)/self.temperature)

@@ -30,16 +30,20 @@ import sklearn
 
 def dndt_trainer(X,y,epochs=1000,lr=0.01,n_features=2,n_classes=2,n_bins=2,temperature=1):
     dndt = DNDT(n_features,n_bins,n_classes,temperature)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    dndt.to(device)
+    X.to(device)
+    y.to(device)
     loss_function = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam([dndt.beta]+[dndt.leaves2classes], lr=0.01)
     for i in range(epochs):
         optimizer.zero_grad()
-        y_pred = dndt.forward(X)
+        y_pred = dndt.forward(X).to(device)
         loss = loss_function(y_pred, y)
         loss.backward()
         optimizer.step()
         if i % 200 == 0:
-            print(f"loss: {loss.detach().numpy()}")
+            print(f"loss: {loss.cpu().detach().numpy()}")
             correct = (y_pred.argmax(1) == y).float().sum()
             print(f"accuracy: {correct/len(y)}")
     return dndt
