@@ -2,9 +2,9 @@ import torch
 from torch.utils.data import DataLoader, Dataset, random_split
 import sklearn.datasets
 
-def moons_dl(prms):
+def moons_dl(prms,noise):
     
-    init_dataset = moonsDataset(prms)
+    init_dataset = moonsDataset(prms,noise)
     params = {'batch_size': prms.n_samples,
           'shuffle': True,
           'num_workers': 6}
@@ -21,10 +21,10 @@ def moons_dl(prms):
 
 class moonsDataset(Dataset):
     
-    def __init__(self,prms):
+    def __init__(self,prms,noise):
         'Initialization'
         
-        noisy_moons = sklearn.datasets.make_moons(n_samples=prms.n_samples, noise=.15)
+        noisy_moons = sklearn.datasets.make_moons(n_samples=prms.n_samples, noise=noise)
         X,Y = noisy_moons
 
         self.samples = torch.tensor(X)

@@ -14,4 +14,5 @@ class parameters():
 
         self.n_samples = 200
 
-        304526254
+        self.lr = 0.01
+

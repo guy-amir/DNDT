@@ -30,6 +30,6 @@ trainset, testset, dataloader = moons_dl(prms)
 dataset_noise = .15
 n_samples = 100
 epochs = 10
-n_bins = 4
+n_bins = 3
 
 model_log,dndt = dndt_trainer(dataloader,n_bins=n_bins,epochs=epochs)

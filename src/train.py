@@ -102,7 +102,7 @@ def dndt_trainer(dataloader,epochs=1000,lr=0.01,n_features=2,n_classes=2,n_bins=
             epoch_acc = running_corrects.double() / dataset_sizes
 
             model_loss[phase].append(epoch_loss)
-            model_acc[phase].append(epoch_acc)
+            model_acc[phase].append(epoch_acc.item())
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
@@ -140,8 +140,10 @@ def dndt_trainer(dataloader,epochs=1000,lr=0.01,n_features=2,n_classes=2,n_bins=
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    
+
     model_log = {'train_loss':model_loss['train'],'train_acc':model_acc['train'],'val_loss':model_loss['val'],'val_acc':model_acc['val']}
+    
+    print("hi")
     return model_log,model
 
 
